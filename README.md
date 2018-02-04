@@ -2,7 +2,7 @@
 画面なしでEC2の停止・開始を実行するだけのGoスクリプトです。
 
 ## Requirement　##
-* AWS Credentials (access to EC2)
+* AWS IAM Role (access to EC2)
 * ec2-switch.go
 * EC2タグの追加
 * ローカルにgo環境（クロスコンパイル用）
@@ -23,7 +23,7 @@ go run ec2-switch.go -o status
 ```
 
 ## Installing ec2-switch ##
-### IAMロールを作成し、下記credentialsを追加 ###
+### IAMロールを作成 ###
 ```
 {
     "Version": "2012-10-17",
@@ -69,25 +69,6 @@ go run ec2-switch.go -o status
         }
     ]
 }
-```
-
-### ソースの編集 ###
-credentialsのaccess_key/secret_access_keyをswitch.goのソースに記載。
-
-```
-func main() {
-    var aws_access_key string
-    var aws_secret_access_key string
-
-    aws_access_key = "xxxxxxxxxxx"
-    aws_secret_access_key = "xxxxxxxxxxxxxxxxxxxx"
-
-    var opt = flag.String("o", "blank", "Option to start or stop")
-    flag.Parse()
-
-    act(*opt, aws_access_key, aws_secret_access_key)
-}
-
 ```
 
 ### 対象のEC2に指定のタグを追加 ###
