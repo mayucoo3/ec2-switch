@@ -5,7 +5,6 @@ import (
     "flag"
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/aws/credentials"
     "github.com/aws/aws-sdk-go/service/ec2"
 )
 
@@ -18,10 +17,9 @@ func contains(m map[string]string, k string, v string ) bool {
     return false
 }
 
-func act(args string, aws_access_key string, aws_secret_access_key string) {
+func act(args string) {
     if (args == "start" || args == "stop" || args == "status"){
         aws_conf := aws.NewConfig()
-        aws_conf.Credentials = credentials.NewStaticCredentials(aws_access_key, aws_secret_access_key, "")
         sess := session.New(aws_conf)
         svc := ec2.New(sess, &aws.Config{Region: aws.String("ap-northeast-1")})
         res, err := svc.DescribeInstances(nil)
@@ -92,14 +90,8 @@ func act(args string, aws_access_key string, aws_secret_access_key string) {
 }
 
 func main() {
-    var aws_access_key string
-    var aws_secret_access_key string
-
-    aws_access_key = "xxxxxxxxxxxxxxxxxxxx"
-    aws_secret_access_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-
     var opt = flag.String("o", "blank", "Option to start or stop")
     flag.Parse()
 
-    act(*opt, aws_access_key, aws_secret_access_key)
+    act(*opt)
 }
